@@ -241,6 +241,7 @@ main(int argc, char **argv)
 			}
 
 			alist = (attrlist_t *)buffer;
+
 			for (i = 0; i < alist->al_count; i++) {
 				aep = (attrlist_ent_t *)&buffer[ alist->al_offset[i] ];
 				if (verbose) {

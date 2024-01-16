@@ -51,6 +51,7 @@ static const char *xfsroot_name = "xfsroot.";
 static int
 api_convert(char *name, const char *irixname, int irixflags, int compat)
 {
+#ifndef __OS2__
 	if (strlen(irixname) >= MAXNAMELEN) {
 		errno = EINVAL;
 		return -1;
@@ -66,12 +67,16 @@ api_convert(char *name, const char *irixname, int irixflags, int compat)
 		strcpy(name, user_name);
 	}
 	strcat(name, irixname);
+#else
+	strcpy(name, irixname);
+#endif
 	return 0;
 }
 
 static int
 api_unconvert(char *name, const char *linuxname, int irixflags)
 {
+#ifndef __OS2__
 	int type, length;
 
 	length = strlen(user_name);
@@ -101,7 +106,11 @@ found:
 		return 1;
 	if ((irixflags & ATTR_ROOT) != 0 && (type != ATTR_ROOT))
 		return 1;
+
 	strcpy(name, linuxname + length);
+#else
+	strcpy(name, linuxname);
+#endif
 	return 0;
 }
 
@@ -304,6 +313,7 @@ attr_list(const char *path, char *buffer, const int buffersize, int flags,
 		length = llistxattr(path, lbuf, sizeof(lbuf));
 	else
 		length = listxattr(path, lbuf, sizeof(lbuf));
+
 	if (length <= 0)
 		return length;
 
